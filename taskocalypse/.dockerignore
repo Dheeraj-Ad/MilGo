@@ -1,0 +1,11 @@
+node_modules
+dist
+.git
+.local
+.env
+.env.*
+server/target
+*.db*
+test-results
+playwright-report
+.openai

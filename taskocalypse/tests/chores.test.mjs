@@ -1,0 +1,8 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { parseCSV,exportCSV,cleanWhitespace,fileCategory } from '../src/lib/chores.mjs';
+test('CSV handles quoted commas, escaped quotes and line breaks',()=>{const rows=parseCSV('description,amount,date\r\n"Coffee, cake",120,2026-10-01\r\n"A ""nice""\nbook",250,2026-10-02');assert.equal(rows.length,2);assert.equal(rows[0].description,'Coffee, cake');assert.equal(rows[1].description,'A "nice"\nbook');assert.equal(rows[1].amount,250);});
+test('CSV rejects missing headers and bad amounts',()=>{assert.throws(()=>parseCSV('name,cost\nx,5'));assert.throws(()=>parseCSV('description,amount\nx,no'));assert.throws(()=>parseCSV('description,amount\nx,'));assert.throws(()=>parseCSV('description,amount\n"x,1'));});
+test('export preserves amounts, quotes fields and neutralizes spreadsheet formulas',()=>{const csv=exportCSV([{date:'2026-10-01',description:'=HYPERLINK("evil")',amount:-5,category:'Other'}]);assert.ok(csv.includes('"\'=HYPERLINK(""evil"")"'));assert.equal(parseCSV(csv)[0].amount,-5);});
+test('whitespace cleanup preserves indentation and source text',()=>{const {fixed,issues}=cleanWhitespace('function a() {  \r\n\treturn "a  b";\t\r\n}\r\n');assert.equal(fixed,'function a() {\n\treturn "a  b";\n}\n');assert.equal(issues.length,2);assert.equal(cleanWhitespace(fixed).issues.length,0);});
+test('files are classified case-insensitively with safe fallback',()=>{assert.equal(fileCategory('holiday.JPG'),'Images');assert.equal(fileCategory('report.csv'),'Documents');assert.equal(fileCategory('main.rs'),'Code');assert.equal(fileCategory('README'),'Other');});

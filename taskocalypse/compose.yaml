@@ -1,0 +1,15 @@
+services:
+  town:
+    build: .
+    ports:
+      - "127.0.0.1:8080:8080"
+    env_file: .env
+    environment:
+      BIND_ADDRESS: 0.0.0.0:8080
+      DATABASE_PATH: /data/taskocalypse.db
+      STATIC_DIR: /app/dist
+    volumes:
+      - town-data:/data
+    restart: unless-stopped
+volumes:
+  town-data:
