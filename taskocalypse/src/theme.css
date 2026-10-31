@@ -1,0 +1,356 @@
+.adventure-card {
+  padding: 20px 18px 16px;
+  border: 1px solid #e5e8dd;
+  background: #fcfcf8;
+  border-radius: 9px;
+}
+
+.adventure-card h2 {
+  margin-top: 13px;
+  font-size: 17px;
+  font-weight: 750;
+  letter-spacing: -.5px;
+}
+
+.adventure-card > p {
+  margin-top: 6px;
+  color: #9ca38f;
+  font-size: 10px;
+  line-height: 1.55;
+}
+
+.keepsake-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.keepsake-list span {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 8px;
+}
+
+.keepsake-found {
+  background: #e8efdf;
+  color: #58754e;
+}
+
+.keepsake-hidden {
+  background: #f0f1eb;
+  color: #9aa18e;
+}
+
+.theme-quick-toggle {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #f8f9f4;
+  color: #718366;
+}
+
+.theme-quick-toggle:hover {
+  background: #edf1e6;
+}
+
+.theme-setting select {
+  min-height: 36px;
+  padding: 0 28px 0 10px;
+  border: 1px solid #e1e6d9;
+  border-radius: 6px;
+  background: #fbfcf8;
+  color: #596b54;
+  font-size: 10px;
+}
+
+.town-loading {
+  position: absolute;
+  inset: 120px 15px 50px;
+  display: grid;
+  place-items: center;
+  color: #829177;
+  font-size: 11px;
+}
+
+.webgl-fallback .discovery-fallback {
+  display: flex;
+  max-width: 440px;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 7px;
+}
+
+.webgl-fallback .discovery-fallback button {
+  padding: 7px 10px;
+  border: 1px solid #dfe5d6;
+  border-radius: 6px;
+  background: #fbfcf6;
+  color: #62744f;
+  font-size: 10px;
+}
+
+.theme-night {
+  color: #e2e9dd;
+  background: #151d17;
+  color-scheme: dark;
+  transition: background-color .25s, color .25s;
+}
+
+.theme-night .sidebar,
+.theme-night .topbar {
+  border-color: #354538;
+  background: #1b251e;
+}
+
+.theme-night .brand small,
+.theme-night .town-label,
+.theme-night .nav-item:not(.active),
+.theme-night .breadcrumb > span:first-of-type,
+.theme-night .breadcrumb strong,
+.theme-night .mode-label,
+.theme-night .profile small {
+  color: #a1b09d;
+}
+
+.theme-night .nav-item:hover,
+.theme-night .profile:hover {
+  background: #29362c;
+}
+
+.theme-night .nav-item.active {
+  background: #344a37;
+  color: #e3eedb;
+}
+
+.theme-night .little-note,
+.theme-night .daily-card,
+.theme-night .adventure-card,
+.theme-night .resident-card,
+.theme-night .level-card,
+.theme-night .district-card,
+.theme-night .modal,
+.theme-night .letter,
+.theme-night .journal-summary,
+.theme-night .activity-row,
+.theme-night .connection-card {
+  border-color: #3b4a3d;
+  background: #202b23;
+}
+
+.theme-night .little-note {
+  background: linear-gradient(130deg, #263329, #202b23);
+}
+
+.theme-night .world-card {
+  border-color: #3b4a3d;
+  background: radial-gradient(ellipse at 48% 35%, #374737, #263329);
+}
+
+.theme-night .daily-card h2,
+.theme-night .adventure-card h2,
+.theme-night .resident-card h3,
+.theme-night .level-card strong,
+.theme-night .district-card strong,
+.theme-night .modal-header h2,
+.theme-night .journal-summary h3,
+.theme-night .settings-content > h3,
+.theme-night .help-content > h3,
+.theme-night .letter h3,
+.theme-night .activity-row strong,
+.theme-night .connection-card strong {
+  color: #e8eee2;
+}
+
+.theme-night .page-heading p,
+.theme-night .daily-card > p,
+.theme-night .adventure-card > p,
+.theme-night .resident-card p,
+.theme-night .resident-card blockquote,
+.theme-night .level-title > span,
+.theme-night .district-card p,
+.theme-night .journal-summary p,
+.theme-night .small-print,
+.theme-night .setting-row small,
+.theme-night .connection-card p,
+.theme-night .letter p,
+.theme-night .terms-content > p,
+.theme-night .help-content p {
+  color: #a7b3a2;
+}
+
+.theme-night .page-heading .eyebrow,
+.theme-night .card-kicker,
+.theme-night .eyebrow,
+.theme-night .daily-progress,
+.theme-night .world-location,
+.theme-night .world-hint,
+.theme-night .world-badge,
+.theme-night .world-season {
+  color: #aab89e;
+}
+
+.theme-night .festival-banner {
+  border-color: #625a3e;
+  background: #3c3a2d;
+  color: #e3d7ab;
+}
+
+.theme-night .festival-banner small,
+.theme-night .festival-banner > svg {
+  color: #c5b479;
+}
+
+.theme-night .weather-pill,
+.theme-night .theme-quick-toggle,
+.theme-night .world-tools button,
+.theme-night .streak,
+.theme-night .help-circle {
+  border-color: #425342;
+  background: #28362c;
+  color: #d4dfcb;
+}
+
+.theme-night .top-divider,
+.theme-night .profile {
+  border-color: #354538;
+}
+
+.theme-night .button:not(.primary),
+.theme-night .settings-link,
+.theme-night .theme-setting select,
+.theme-night .webgl-fallback .discovery-fallback button {
+  border-color: #455646;
+  background: #2a382d;
+  color: #dae4d4;
+}
+
+.theme-night .button.primary {
+  border-color: #557c58;
+  background: #456d4c;
+}
+
+.theme-night .setting-row {
+  border-color: #39483b;
+}
+
+.theme-night .notice {
+  border-color: #435443;
+  background: #2b382c;
+  color: #c3d2b9;
+}
+
+.theme-night .demo-notice {
+  border-color: #5a5338;
+  background: #3a372a;
+  color: #d3c28b;
+}
+
+.theme-night .error-message {
+  border-color: #68483d;
+  background: #382824;
+  color: #e0ad97;
+}
+
+.theme-night .auth-tabs {
+  background: #2a362b;
+}
+
+.theme-night .auth-tabs button,
+.theme-night .checkbox-label,
+.theme-night .auth-content label,
+.theme-night .terms-content h3,
+.theme-night .empty-state,
+.theme-night .quest-list strong,
+.theme-night .mail-row strong,
+.theme-night .announcement-row strong {
+  color: #e0e9d8;
+}
+
+.theme-night .help-resident,
+.theme-night .settings-link,
+.theme-night .announcement-row,
+.theme-night .mail-row {
+  border-color: #39483b;
+}
+
+.theme-night .nav-count {
+  border-color: #455646;
+  background: #2a382d;
+  color: #c4d0bd;
+}
+
+.theme-night .keepsake-found {
+  background: #354a36;
+  color: #d0e3c2;
+}
+
+.theme-night .keepsake-hidden {
+  background: #2a352b;
+  color: #aab4a2;
+}
+
+.theme-night .progress-track {
+  background: #354237;
+}
+
+.theme-night input,
+.theme-night textarea,
+.theme-night select {
+  border-color: #465646;
+  background: #1c271f;
+  color: #e2e9dd;
+}
+
+.theme-night .modal-backdrop {
+  background: #0d140fb8;
+}
+
+.theme-night .toast {
+  border-color: #3b4a3d;
+  background: #202b23;
+  color: #e8eee2;
+}
+
+.theme-night .town-canvas.night {
+  background: #59677c;
+}
+
+.theme-night .weather-pill svg {
+  color: #d9c47b;
+}
+
+.theme-night .resident-marker {
+  border-color: #3b4a3d;
+  background: #202b23;
+  color: #e3eadc;
+}
+
+.theme-night .activity-check {
+  background: #354a36;
+  color: #d0e3c2;
+}
+
+@media (max-width: 700px) {
+  .adventure-card {
+    padding: 15px 12px;
+  }
+
+  .adventure-card h2 {
+    margin-top: 9px;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .adventure-card > p {
+    font-size: 8px;
+  }
+
+  .theme-quick-toggle {
+    width: 30px;
+    height: 30px;
+  }
+}

@@ -4,6 +4,8 @@ A cozy, interactive 3D town that turns digital chores into small quests.
 
 **Frontend:** React, TypeScript, Three.js, Vite. **Backend:** Rust, Axum, SQLite.
 
+Explore Serenity Valley to discover keepsakes, earn XP, and follow the local-time day/night cycle. The 3D town is loaded on demand so sign-in and the rest of the interface can appear sooner.
+
 See [the complete setup guide](public/SETUP.md) for local startup, Google OAuth, Docker deployment, and the supported feature boundaries.
 
 ```sh

@@ -1,27 +1,23 @@
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { discoveries, residents, type District } from './townData';
 
-export type District = 'mail' | 'files' | 'expenses' | 'code' | 'community';
-export const residents: {id: District; name: string; role: string; color: string; x: number; z: number}[] = [
-  { id:'mail', name:'Milo', role:'Your mail courier', color:'#568b4d', x:-3.5,z:2.6 },
-  { id:'files', name:'Poppy', role:'The town librarian', color:'#cb895a',x:-6,z:-3.8 },
-  { id:'expenses', name:'Jasper', role:'Your coin keeper', color:'#d0a342',x:5.2,z:2.8 },
-  { id:'code', name:'Ada', role:'The workshop tinkerer', color:'#9d87bd',x:5,z:-4 },
-  { id:'community', name:'Sunny', role:'The festival host',color:'#db827a',x:0,z:-5.3 },
-];
-interface Props { onInteract:(id:District)=>void; active:District|null; night:boolean; zoom:number; reset:number; reducedMotion:boolean; }
+export { discoveries, residents } from './townData';
+export type { District } from './townData';
+interface Props { onInteract:(id:District)=>void; onDiscover:(id:string)=>void; foundDiscoveries:string[]; active:District|null; night:boolean; zoom:number; reset:number; reducedMotion:boolean; }
 
-export default function Town({onInteract,active,night,zoom,reset,reducedMotion}:Props) {
+export default function Town({onInteract,onDiscover,foundDiscoveries,active,night,zoom,reset,reducedMotion}:Props) {
   const mount=useRef<HTMLDivElement>(null);
   const callback=useRef(onInteract); callback.current=onInteract;
-  const settings=useRef({active,night,zoom,reset,reducedMotion});settings.current={active,night,zoom,reset,reducedMotion};
+  const discoveryCallback=useRef(onDiscover);discoveryCallback.current=onDiscover;
+  const settings=useRef({active,night,zoom,reset,reducedMotion,foundDiscoveries});settings.current={active,night,zoom,reset,reducedMotion,foundDiscoveries};
   const [failed,setFailed]=useState(false);
   useEffect(()=>{
     const host=mount.current!;
     let renderer:THREE.WebGLRenderer;
     try { renderer=new THREE.WebGLRenderer({antialias:true,alpha:true}); } catch {setFailed(true);return;}
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio,1.5));
     renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
     renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.35;
     renderer.domElement.setAttribute('aria-label','Interactive 3D town. Use arrow keys or WASD to walk, E to talk, and drag to look around.');
@@ -30,7 +26,7 @@ export default function Town({onInteract,active,night,zoom,reset,reducedMotion}:
     const camera=new THREE.OrthographicCamera(-15,15,12,-12,.1,200);camera.position.set(23,24,29);
     const controls=new OrbitControls(camera,renderer.domElement);controls.target.set(0,0,0);controls.enableDamping=true;controls.enablePan=false;controls.minPolarAngle=.3;controls.maxPolarAngle=1.25;controls.minZoom=.65;controls.maxZoom=2.8;controls.enableZoom=true;
     const ambient=new THREE.HemisphereLight('#fff9e6','#819067',3);scene.add(ambient);
-    const sun=new THREE.DirectionalLight('#fff3d1',4);sun.position.set(-12,24,10);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);Object.assign(sun.shadow.camera,{left:-22,right:22,top:22,bottom:-22,near:1,far:75});sun.shadow.normalBias=.035;scene.add(sun);
+    const sun=new THREE.DirectionalLight('#fff3d1',4);sun.position.set(-12,24,10);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);Object.assign(sun.shadow.camera,{left:-22,right:22,top:22,bottom:-22,near:1,far:75});sun.shadow.normalBias=.035;scene.add(sun);
     const materials=new Map<string,THREE.MeshStandardMaterial>();
     function mat(color:string){if(!materials.has(color))materials.set(color,new THREE.MeshStandardMaterial({color,roughness:.85}));return materials.get(color)!;}
     const geometries:THREE.BufferGeometry[]=[];
@@ -85,6 +81,8 @@ export default function Town({onInteract,active,night,zoom,reset,reducedMotion}:
     for(let i=0;i<13;i++){const p=curve.getPoint((i+.5)/13);const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute([-.2,0,0,.2,0,0,0,-.44,0],3));g.computeVertexNormals();const m=mesh(g,['#c3846b','#e5c771','#8da488','#b6a3bf'][i%4],p.x,p.y,p.z);m.material=new THREE.MeshStandardMaterial({color:['#c3846b','#e5c771','#8da488','#b6a3bf'][i%4],side:THREE.DoubleSide});}
     function character(color:string,x:number,z:number){const g=new THREE.Group();g.position.set(x,.18,z);scene.add(g);cyl(.22,.3,.58,color,0,.68,0,g);ball(.23,'#e8bd90',0,1.22,0,g);ball(.24,'#69513d',0,1.34,-.035,g);box(.33,.18,.2,'#e8bd90',0,1.23,.13,g);for(const side of [-1,1]){cyl(.075,.08,.4,'#5b6258',side*.12,.25,0,g);box(.15,.12,.27,'#675641',side*.12,.07,.065,g);cyl(.07,.085,.42,color,side*.3,.73,0,g);ball(.075,'#e8bd90',side*.32,.49,0,g);ball(.022,'#3f4134',side*.085,1.28,.245,g);}return g;}
     const npcs=residents.map(r=>{const g=character(r.color,r.x,r.z);g.rotation.y=.3;g.userData.district=r.id;g.traverse(o=>o.userData.district=r.id);const ring=mesh(new THREE.TorusGeometry(.48,.035,8,32),r.color,r.x,.21,r.z);ring.rotation.x=Math.PI/2;return {g,ring,r};});
+    const found=new Set(foundDiscoveries);
+    const keepsakes=discoveries.filter(item=>!found.has(item.id)).map(item=>{const group=new THREE.Group();group.position.set(item.x,0,item.z);scene.add(group);const gem=mesh(new THREE.OctahedronGeometry(.24), '#f1cc6e',0,.72,0,group);gem.castShadow=false;const glint=mesh(new THREE.OctahedronGeometry(.1),'#fff2b0',.08,.76,.08,group);glint.castShadow=false;const ring=mesh(new THREE.TorusGeometry(.38,.025,6,20),'#dfbd68',0,.2,0,group);ring.rotation.x=Math.PI/2;ring.castShadow=false;return {id:item.id,group,gem};});
     const player=character('#467e8e',-1,6);player.scale.setScalar(1.1);
     const marker=mesh(new THREE.ConeGeometry(.15,.32,4),'#f3da86',-1,2.2,6);marker.rotation.z=Math.PI;
     const labels:HTMLButtonElement[]=[];
@@ -100,6 +98,7 @@ export default function Town({onInteract,active,night,zoom,reset,reducedMotion}:
       if(settings.current.zoom!==lastZoom){camera.zoom=settings.current.zoom;camera.updateProjectionMatrix();lastZoom=settings.current.zoom;}
       if(settings.current.reset!==lastReset){camera.position.set(23,24,29);controls.target.set(0,0,0);camera.zoom=1;camera.updateProjectionMatrix();lastReset=settings.current.reset;}
       ambient.intensity=settings.current.night?1.15:3;sun.intensity=settings.current.night?.8:4;
+      keepsakes.forEach(item=>{if(found.has(item.id))return;item.group.rotation.y=t*.65;item.gem.position.y=.72+(settings.current.reducedMotion?0:Math.sin(t*2.5)*.11);if(item.group.position.distanceTo(player.position)<1.05){found.add(item.id);scene.remove(item.group);discoveryCallback.current(item.id);}});
       let dx=0,dz=0;if(keys.has('w')||keys.has('arrowup'))dz-=1;if(keys.has('s')||keys.has('arrowdown'))dz+=1;if(keys.has('a')||keys.has('arrowleft'))dx-=1;if(keys.has('d')||keys.has('arrowright'))dx+=1;
       if(!document.querySelector('[role="dialog"]')&&(dx||dz)){const l=Math.hypot(dx,dz);const nx=player.position.x+dx/l*dt*4,nz=player.position.z+dz/l*dt*4;const onPath=Math.abs(nx)<1.35||Math.abs(nz-2.4)<1.35||Math.abs(nz+4.4)<.85;if(onPath&&Math.abs(nx)<11&&Math.abs(nz)<9){player.position.x=nx;player.position.z=nz;}player.rotation.y=Math.atan2(dx,dz);player.position.y=.18+(settings.current.reducedMotion?0:Math.abs(Math.sin(t*12))*.08);}
       marker.position.set(player.position.x,2.15+(settings.current.reducedMotion?0:Math.sin(t*3)*.1),player.position.z);
@@ -109,5 +108,5 @@ export default function Town({onInteract,active,night,zoom,reset,reducedMotion}:
     }frame=requestAnimationFrame(animate);
     return()=>{cancelAnimationFrame(frame);observer.disconnect();controls.dispose();window.removeEventListener('keydown',down);window.removeEventListener('keyup',up);window.removeEventListener('blur',blur);renderer.domElement.removeEventListener('pointerdown',pointerDown);renderer.domElement.removeEventListener('click',click);labels.forEach(l=>l.remove());geometries.forEach(g=>g.dispose());materials.forEach(m=>m.dispose());scene.traverse(o=>{if(o instanceof THREE.Mesh&&!Array.from(materials.values()).includes(o.material))o.material.dispose();});renderer.dispose();renderer.domElement.remove();};
   },[]);
-  return <div className={`town-canvas ${night?'night':''}`} ref={mount}>{failed&&<div className="webgl-fallback"><h2>Your town is taking a little break.</h2><p>3D needs a browser with WebGL enabled. You can still meet every resident below.</p>{residents.map(r=><button key={r.id} onClick={()=>onInteract(r.id)}>{r.name} · {r.role}</button>)}</div>}</div>;
+  return <div className={`town-canvas ${night?'night':''}`} ref={mount}>{failed&&<div className="webgl-fallback"><h2>Your town is taking a little break.</h2><p>3D needs a browser with WebGL enabled. You can still meet every resident and explore the keepsakes below.</p><div className="discovery-fallback">{discoveries.filter(item=>!foundDiscoveries.includes(item.id)).map(item=><button key={item.id} onClick={()=>onDiscover(item.id)}>Find {item.name}</button>)}</div>{residents.map(r=><button key={r.id} onClick={()=>onInteract(r.id)}>{r.name} · {r.role}</button>)}</div>}</div>;
 }

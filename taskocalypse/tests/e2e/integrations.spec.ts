@@ -32,3 +32,15 @@ test('connected inbox supports pagination and explicit reply payloads',async({pa
  await page.getByRole('button',{name:/An older letter/}).click();await page.getByPlaceholder('Hey! Lovely to hear from you…').fill('Thanks, Milo.');
  expect(sent).toBeUndefined();await page.getByRole('button',{name:'Send reply via Gmail'}).click();await expect(page.getByRole('status')).toContainText('Reply sent through Gmail.');expect(sent).toEqual({body:'Thanks, Milo.'});
 });
+
+test('adventure keepsakes can be found and stay found without WebGL',async({page})=>{
+ await page.addInitScript(()=>localStorage.setItem('tq-demo','true'));
+ await page.goto('/');
+ await expect(page.getByText('0 of 6 discovered')).toBeVisible();
+ await page.getByRole('button',{name:'Find Sunlit acorn'}).click();
+ await expect(page.getByText('1 of 6 discovered')).toBeVisible();
+ await expect(page.getByRole('status')).toContainText('Discovered Sunlit acorn');
+ await page.reload();
+ await expect(page.getByText('1 of 6 discovered')).toBeVisible();
+ await expect(page.getByRole('button',{name:'Find Sunlit acorn'})).toHaveCount(0);
+});

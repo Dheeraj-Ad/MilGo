@@ -85,7 +85,7 @@ Official references:
 - **Jasper:** imports a CSV with `description`, `amount`, and optional `date`, records your categories locally, and exports the reviewed ledger. No bank connection. Amounts retain the input currency.
 - **Ada:** finds trailing whitespace and downloads a cleaned code file. This is a narrowly scoped cleanup tool, not a full Rust/JavaScript linter. Original files are not overwritten.
 
-WASD/arrows walk on the paths. E talks to the nearest resident. Click name labels or use the sidebar for direct access. Drag to orbit; scroll or use +/- to zoom. Settings has night lighting, sound, and reduced motion.
+WASD/arrows walk on the paths. Explore Serenity Valley to find six keepsakes; each discovery earns XP and stays found on this browser. If WebGL is unavailable, the town provides an accessible keepsake list instead. E talks to the nearest resident. Click name labels or use the sidebar for direct access. Drag to orbit; scroll or use +/- to zoom. Day/night mode follows local time by default, with manual day and night options in Settings. Sound and reduced motion are also available.
 
 ## Docker deployment
 
@@ -113,6 +113,7 @@ npm run test:e2e
 - PKCE and one-time, browser-bound OAuth state; encrypted Google access/refresh tokens with account-bound authenticated encryption; token refresh only within the verified activation.
 - Real mail actions require explicit buttons. A durable action reservation blocks duplicate sends, including uncertain network outcomes. If delivery is uncertain, inspect Gmail; the app deliberately will not retry that message's reply. A later new incoming message can receive its own reply.
 - XP is persisted for Gmail actions and awarded only after Gmail reports success. Demo progress persists in this browser. Local chore XP lasts for the visit on signed-in accounts. Quest history for signed-in accounts is limited to the current visit.
+- Adventure keepsake discoveries and the selected day/night mode are saved in the current browser. They do not sync between devices.
 - A single SQLite-backed server instance serializes mail operations and runs background inbox sync and expiry cleanup. Multi-instance deployment, account recovery, and production observability need additional work before broad release. This implementation is tested, not a guarantee of perfect security.
 - No live Gmail connection can be tested until you configure your own Google project and authorize a test account.
 
